@@ -1,6 +1,6 @@
 version: "3.9"
 services:
-  list-channles:
+  list-channels:
     image: local:list-channels
     build:
       context: .
