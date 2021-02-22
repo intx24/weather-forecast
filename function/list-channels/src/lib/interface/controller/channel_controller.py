@@ -41,7 +41,6 @@ class ChannelController:
 
         request = ChannelListRequest(token=token)
         response = self.__list_interactor.handle(request)
-        print(response)
 
         return {
             'statusCode': response.statusCode,

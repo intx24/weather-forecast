@@ -34,3 +34,18 @@ class TestChannelController(TestCase):
             }, default=ChannelController.default_method)
         }
         self.assertEqual(expected, actual)
+
+    @mock.patch('os.getenv')
+    def test_list__raise(self, mock_getenv):
+        self.__list_interactor_mock.handle.return_value = ChannelListResponse(
+            statusCode=HTTPStatus.OK,
+            errors=[],
+            channel_list=[]
+        )
+        mock_getenv.side_effect = Exception('error')
+
+        controller = ChannelController(self.__list_interactor_mock)
+        actual = controller.list()
+
+        self.assertEqual(HTTPStatus.INTERNAL_SERVER_ERROR, actual['statusCode'])
+        self.assertTrue('error' in actual['body'])

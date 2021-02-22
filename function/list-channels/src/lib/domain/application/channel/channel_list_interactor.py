@@ -10,7 +10,7 @@ from lib.usecase.channel.list.channel_list_response import ChannelListResponse
 
 
 class ChannelListInteractor(AbstractChannelListUseCase):
-    __repository = AbstractChannelRepository
+    __repository: AbstractChannelRepository
 
     def __init__(self, repository: AbstractChannelRepository):
         self.__repository = repository
