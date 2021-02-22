@@ -1,0 +1,9 @@
+version: "3.9"
+services:
+  list-channles:
+    image: local:list-channels
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      BOT_USER_TOKEN: token

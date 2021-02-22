@@ -1,0 +1,13 @@
+version: "3.9"
+services:
+  list-channles:
+    image: local:list-channels
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    ports:
+      - 8082:8080
+    environment:
+      BOT_USER_TOKEN: token
+    volumes:
+      - ./src:/var/task
