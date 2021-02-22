@@ -41,12 +41,6 @@ class ForecastController:
         request: ForecastGetRequest = ForecastGetRequest(city=city)
         response = self.__get_interactor.handle(request)
 
-        x = json.dumps({
-            'errors': response.errors,
-            'forecast': response.forecast,
-        }, default=ForecastController.default_method,
-            ensure_ascii=False)
-
         return {
             'statusCode': response.statusCode,
             'headers': {

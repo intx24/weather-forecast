@@ -9,6 +9,9 @@ from lib.domain.domain.forecast.forecast import Forecast, Description, Temperatu
 
 class ForecastRepository(AbstractForecastRepository):
 
+    def __init__(self):
+        pass
+
     def get_by_city(self, city: int) -> Forecast:
         response = requests.get(
             'https://weather.tsukumijima.net/api/forecast',
