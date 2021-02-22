@@ -18,4 +18,4 @@ infra/.idea
 function/**/venv
 function/**/.idea
 function/**/__pycache__
-function/list-channels/docker-compose.override.yml
+function/**/docker-compose.override.yml

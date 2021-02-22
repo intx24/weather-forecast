@@ -1,0 +1,13 @@
+version: "3.9"
+services:
+  send-message:
+    image: local:send-message
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    ports:
+      - 8083:8080
+    environment:
+      BOT_USER_TOKEN: token
+    volumes:
+      - ./src:/var/task
