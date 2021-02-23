@@ -18,10 +18,9 @@ class MessageRepository(AbstractMessageRepository):
             json.dumps({
                 'channel': message.channel,
                 'icon_emoji': message.icon_emoji,
-                'icon_url': message.icon_url,
                 'link_names': message.link_names,
                 'text': message.text,
-                'user_name': message.user_name,
+                'username': message.username,
             }, ensure_ascii=False).encode('utf-8'),
             headers={
                 'Authorization': f'Bearer {token}',

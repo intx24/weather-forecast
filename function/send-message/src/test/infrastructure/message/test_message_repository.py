@@ -27,9 +27,8 @@ class TestMessageRepository(TestCase):
         mock_post.return_value = response
 
         message = Message(
-            icon_url='icon_url',
-            icon_emoji='icon_emoji',
-            user_name='user_name',
+            icon_emoji=':sun:',
+            username='username',
             text='text',
             link_names=True,
             channel='channel',
@@ -45,9 +44,8 @@ class TestMessageRepository(TestCase):
         mock_post.return_value = response
 
         message = Message(
-            icon_url='icon_url',
             icon_emoji='icon_emoji',
-            user_name='user_name',
+            username='username',
             text='text',
             link_names=True,
             channel='channel',

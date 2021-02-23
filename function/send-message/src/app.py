@@ -1,6 +1,7 @@
 import json
 
 from lib.domain.application.message.message_send_interactor import MessageSendInteractor
+from lib.infrastructure.channel.channel_repository import ChannelRepository
 from lib.infrastructure.message.message_repository import MessageRepository
 from lib.interface.controller.message_controller import MessageController
 
@@ -10,7 +11,10 @@ def handler(event, context):
     print('event:' + json.dumps(event, ensure_ascii=False))
 
     message_controller = MessageController(
-        send_interactor=MessageSendInteractor(MessageRepository())
+        message_send_interactor=MessageSendInteractor(
+            ChannelRepository(),
+            MessageRepository(),
+        )
     )
     response = message_controller.send(event)
 

@@ -9,7 +9,7 @@ from lib.usecase.message.send.message_send_request import MessageSendRequest
 
 
 class MessageController:
-    __send_interactor: AbstractMessageSendUseCase
+    __message_send_interactor: AbstractMessageSendUseCase
 
     @staticmethod
     def default_method(item):
@@ -18,8 +18,8 @@ class MessageController:
         else:
             raise TypeError
 
-    def __init__(self, send_interactor: AbstractMessageSendUseCase):
-        self.__send_interactor = send_interactor
+    def __init__(self, message_send_interactor: AbstractMessageSendUseCase):
+        self.__message_send_interactor = message_send_interactor
 
     def send(self, event: Dict) -> Dict:
         try:
@@ -40,14 +40,10 @@ class MessageController:
 
         request = MessageSendRequest(
             token=token,
-            channel=event['channel'],
-            link_names=True,
             text=event['text'],
-            user_name=event['user_name'] if 'user_name' in event else 'weather_bot',
-            icon_emoji=event['icon_emoji'] if 'icon_emoji' in event else None,
-            icon_url=event['icon_url'] if 'icon_url' in event else None,
+            telop=event['telop'],
         )
-        response = self.__send_interactor.handle(request)
+        response = self.__message_send_interactor.handle(request)
         print(response)
 
         return {

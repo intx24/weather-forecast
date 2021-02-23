@@ -6,6 +6,5 @@ class Message:
     channel: str
     link_names: bool
     text: str
-    user_name: str
+    username: str
     icon_emoji: str = None
-    icon_url: str = None
