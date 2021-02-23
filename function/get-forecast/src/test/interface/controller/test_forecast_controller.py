@@ -27,40 +27,9 @@ class TestForecastController(TestCase):
             'headers': {
                 'Content-Type': 'application/json'
             },
-            'body': json.dumps({
-                'errors': [],
+            'body': {
                 'telop': None,
                 'summary': None,
-            }, default=ForecastController.default_method)
+            }
         }
         self.assertEqual(expected, actual)
-
-    def test_get__raise_validation_exception(self):
-        self.__get_interactor_mock.handle.return_value = ForecastGetResponse(
-            statusCode=HTTPStatus.OK,
-            errors=[],
-            telop=None,
-            summary=None,
-        )
-
-        controller = ForecastController(get_interactor=self.__get_interactor_mock)
-
-        actual1 = controller.get({})
-        self.assertEqual(HTTPStatus.BAD_REQUEST, actual1['statusCode'])
-        self.assertEqual({'Content-Type': 'application/json'}, actual1['headers'])
-        self.assertTrue('error' in actual1['body'])
-
-        actual2 = controller.get({'city': ''})
-        self.assertEqual(HTTPStatus.BAD_REQUEST, actual2['statusCode'])
-        self.assertEqual({'Content-Type': 'application/json'}, actual2['headers'])
-        self.assertTrue('error' in actual2['body'])
-
-        actual3 = controller.get({'city': 'str'})
-        self.assertEqual(HTTPStatus.BAD_REQUEST, actual3['statusCode'])
-        self.assertEqual({'Content-Type': 'application/json'}, actual3['headers'])
-        self.assertTrue('error' in actual3['body'])
-
-        actual3 = controller.get({'city': None})
-        self.assertEqual(HTTPStatus.BAD_REQUEST, actual3['statusCode'])
-        self.assertEqual({'Content-Type': 'application/json'}, actual3['headers'])
-        self.assertTrue('error' in actual3['body'])

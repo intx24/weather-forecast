@@ -6,14 +6,14 @@ from aws_cdk.aws_logs import RetentionDays
 from lib.config.secrets import secrets
 
 
-def get_list_channels_resource(scope: core.Construct, ecr: IRepository) -> DockerImageFunction:
+def get_send_message_resource(scope: core.Construct, ecr: IRepository) -> DockerImageFunction:
     return DockerImageFunction(
         scope=scope,
-        id='ListChannelsFunction',
-        function_name='list-channels',
+        id='SendMessageFunction',
+        function_name='send-message',
         code=DockerImageCode.from_ecr(
             repository=ecr,
-            tag='list-channels',
+            tag='send-message',
         ),
         log_retention=RetentionDays.ONE_DAY,
         environment={

@@ -4,6 +4,7 @@ from lib.domain.application.forecast.forecast_get_interactor import ForecastGetI
 from lib.infrastructure.forecast.forecast_repository import ForecastRepository
 from lib.interface.controller.forecast_controller import ForecastController
 
+
 def handler(event, context):
     print('========start get-forecast========')
     print('event:' + json.dumps(event, ensure_ascii=False))

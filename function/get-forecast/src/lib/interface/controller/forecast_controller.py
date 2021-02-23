@@ -21,23 +21,7 @@ class ForecastController:
         self.__get_interactor = get_interactor
 
     def get(self, event: Dict) -> Dict:
-        try:
-            city = int(event['city'])
-        except Exception as e:
-            e_message = ''.join(traceback.TracebackException.from_exception(e).format())
-
-            return {
-                'statusCode': HTTPStatus.BAD_REQUEST,
-                'headers': {
-                    'Content-Type': 'application/json'
-                },
-                'body': json.dumps({
-                    'errors': [e_message],
-                    'telop': None,
-                    'summary': None,
-                }, default=ForecastController.default_method,
-                    ensure_ascii=False)
-            }
+        city = int(event['city'])
 
         request: ForecastGetRequest = ForecastGetRequest(city=city)
         response = self.__get_interactor.handle(request)
@@ -47,11 +31,8 @@ class ForecastController:
             'headers': {
                 'Content-Type': 'application/json'
             },
-            'body': json.dumps({
-                'errors': response.errors,
+            'body': {
                 'telop': response.telop,
                 'summary': response.summary,
-            },
-                default=ForecastController.default_method,
-                ensure_ascii=False)
+            }
         }

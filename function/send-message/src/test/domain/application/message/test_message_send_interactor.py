@@ -35,27 +35,3 @@ class TestMessageSendInteractor(TestCase):
             errors=[]
         )
         self.assertEqual(expected, actual)
-
-    def test_handle__raise(self):
-        channel_list = [Channel(
-            id='id1',
-            name='channel1',
-            is_private=True
-        )]
-        self.__channel_repository_mock.list.return_value = channel_list
-        self.__message_repository_mock.send.side_effect = Exception('error')
-        interactor = MessageSendInteractor(self.__channel_repository_mock, self.__message_repository_mock)
-
-        request = MessageSendRequest(
-            token='token',
-            summary='summary',
-            telop='雨',
-        )
-
-        actual = interactor.handle(request)
-        expected = MessageSendResponse(
-            statusCode=HTTPStatus.INTERNAL_SERVER_ERROR,
-            errors=['error'],
-        )
-        self.assertEqual(expected.statusCode, actual.statusCode)
-        self.assertTrue('error' in actual.errors[0])

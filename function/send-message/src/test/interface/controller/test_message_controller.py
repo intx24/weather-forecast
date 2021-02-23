@@ -36,20 +36,3 @@ class TestMessageController(TestCase):
             }, default=MessageController.default_method)
         }
         self.assertEqual(expected, actual)
-
-    @mock.patch('os.getenv')
-    def test_list__raise(self, mock_getenv):
-        self.__message_send_interactor_mock.handle.return_value = MessageSendResponse(
-            statusCode=HTTPStatus.OK,
-            errors=[],
-        )
-        mock_getenv.side_effect = Exception('error')
-
-        controller = MessageController(self.__message_send_interactor_mock)
-        actual = controller.send(event={
-            'summary': 'summary',
-            'telop': '雨',
-        })
-
-        self.assertEqual(HTTPStatus.INTERNAL_SERVER_ERROR, actual['statusCode'])
-        self.assertTrue('error' in actual['body'])

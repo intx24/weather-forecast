@@ -14,3 +14,6 @@ class StackUtil:
 
     def get_name(self, resource_part: str) -> str:
         return f"{self.__default_config['system_name']}-{resource_part}"
+
+    def get_upper_name(self, resource_part: str) -> str:
+        return f"{self.__default_config['system_name']}-{resource_part}".upper()

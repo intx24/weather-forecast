@@ -1,4 +1,3 @@
-import traceback
 from http import HTTPStatus
 from typing import List
 
@@ -33,33 +32,23 @@ class MessageSendInteractor(AbstractMessageSendUseCase):
             return ':sun:'
 
     def handle(self, request: MessageSendRequest) -> MessageSendResponse:
-        try:
-            channel_list: List[Channel] = self.__channel_repository.list(request.token)
-            channel_name_list: List[str] = [c.name for c in channel_list]
+        channel_list: List[Channel] = self.__channel_repository.list(request.token)
+        channel_name_list: List[str] = [c.name for c in channel_list]
 
-            for n in channel_name_list:
-                message = Message(
-                    text=request.summary,
-                    channel=n,
-                    username='天気予報Bot',
-                    link_names=True,
-                    icon_emoji=MessageSendInteractor.get_icon_emoji(request.telop),
-                )
-                print(message)
-                # TODO: 非同期で並列に走らせる
-                self.__message_repository.send(request.token, message)
-
-            response = MessageSendResponse(
-                statusCode=HTTPStatus.OK,
-                errors=[],
+        for n in channel_name_list:
+            message = Message(
+                text=request.summary,
+                channel=n,
+                username='天気予報Bot',
+                link_names=True,
+                icon_emoji=MessageSendInteractor.get_icon_emoji(request.telop),
             )
-            return response
-        except Exception as e:
-            e_message = ''.join(traceback.TracebackException.from_exception(e).format())
+            print(message)
+            # TODO: 非同期で並列に走らせる
+            self.__message_repository.send(request.token, message)
 
-            response = MessageSendResponse(
-                statusCode=HTTPStatus.INTERNAL_SERVER_ERROR,
-                errors=[e_message],
-            )
-
-            return response
+        response = MessageSendResponse(
+            statusCode=HTTPStatus.OK,
+            errors=[],
+        )
+        return response
