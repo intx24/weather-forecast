@@ -4,6 +4,6 @@ services:
     image: local:list-channels
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: docker/Dockerfile
     environment:
       BOT_USER_TOKEN: token

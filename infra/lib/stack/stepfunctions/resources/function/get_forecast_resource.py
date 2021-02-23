@@ -4,10 +4,10 @@ from aws_cdk.aws_lambda import DockerImageFunction, DockerImageCode
 from aws_cdk.aws_logs import RetentionDays
 
 
-def get_get_weather_forecast_resource(scope: core.Construct, ecr: IRepository) -> DockerImageFunction:
+def get_get_forecast_resource(scope: core.Construct, ecr: IRepository) -> DockerImageFunction:
     return DockerImageFunction(
         scope=scope,
-        id='GetWeatherForecastFunction',
+        id='GetForecastFunction',
         function_name='get-forecast',
         code=DockerImageCode.from_ecr(
             repository=ecr,
