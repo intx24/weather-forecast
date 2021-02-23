@@ -15,7 +15,8 @@ class TestForecastController(TestCase):
         self.__get_interactor_mock.handle.return_value = ForecastGetResponse(
             statusCode=HTTPStatus.OK,
             errors=[],
-            forecast=None,
+            telop=None,
+            summary=None,
         )
 
         controller = ForecastController(get_interactor=self.__get_interactor_mock)
@@ -28,7 +29,8 @@ class TestForecastController(TestCase):
             },
             'body': json.dumps({
                 'errors': [],
-                'forecast': None
+                'telop': None,
+                'summary': None,
             }, default=ForecastController.default_method)
         }
         self.assertEqual(expected, actual)
@@ -37,7 +39,8 @@ class TestForecastController(TestCase):
         self.__get_interactor_mock.handle.return_value = ForecastGetResponse(
             statusCode=HTTPStatus.OK,
             errors=[],
-            forecast=None,
+            telop=None,
+            summary=None,
         )
 
         controller = ForecastController(get_interactor=self.__get_interactor_mock)

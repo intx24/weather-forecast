@@ -26,7 +26,7 @@ class TestMessageSendInteractor(TestCase):
 
         request = MessageSendRequest(
             token='token',
-            text='text',
+            summary='summary',
             telop='晴れ',
         )
         actual = interactor.handle(request)
@@ -48,7 +48,7 @@ class TestMessageSendInteractor(TestCase):
 
         request = MessageSendRequest(
             token='token',
-            text='text',
+            summary='summary',
             telop='雨',
         )
 

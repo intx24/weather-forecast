@@ -12,7 +12,7 @@ class TestMessageController(TestCase):
     __message_send_interactor_mock = Mock(spec=MessageSendInteractor)
 
     @mock.patch('os.getenv')
-    def test_send(self, mock_getenv):
+    def test_send__ok(self, mock_getenv):
         self.__message_send_interactor_mock.handle.return_value = MessageSendResponse(
             statusCode=HTTPStatus.OK,
             errors=[],
@@ -22,7 +22,7 @@ class TestMessageController(TestCase):
         controller = MessageController(self.__message_send_interactor_mock)
         actual = controller.send(event={
             'token': 'token',
-            'text': 'text',
+            'summary': 'summary',
             'telop': '晴れ',
         })
 
@@ -47,7 +47,7 @@ class TestMessageController(TestCase):
 
         controller = MessageController(self.__message_send_interactor_mock)
         actual = controller.send(event={
-            'text': 'text',
+            'summary': 'summary',
             'telop': '雨',
         })
 

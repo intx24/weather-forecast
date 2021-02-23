@@ -38,13 +38,15 @@ class MessageController:
                     ensure_ascii=False)
             }
 
+        telop: str = event['telop'] if 'telop' in event else ''
+        summary: str = event['summary'] if 'summary' in event else ''
+        r_summary: str = summary.replace('\\n', '\n')
         request = MessageSendRequest(
             token=token,
-            text=event['text'],
-            telop=event['telop'],
+            summary=r_summary,
+            telop=telop,
         )
         response = self.__message_send_interactor.handle(request)
-        print(response)
 
         return {
             'statusCode': response.statusCode,

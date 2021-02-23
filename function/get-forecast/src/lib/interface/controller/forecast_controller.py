@@ -33,7 +33,8 @@ class ForecastController:
                 },
                 'body': json.dumps({
                     'errors': [e_message],
-                    'forecast': None,
+                    'telop': None,
+                    'summary': None,
                 }, default=ForecastController.default_method,
                     ensure_ascii=False)
             }
@@ -48,7 +49,8 @@ class ForecastController:
             },
             'body': json.dumps({
                 'errors': response.errors,
-                'forecast': response.forecast,
+                'telop': response.telop,
+                'summary': response.summary,
             },
                 default=ForecastController.default_method,
                 ensure_ascii=False)

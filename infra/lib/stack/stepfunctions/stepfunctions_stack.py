@@ -1,5 +1,8 @@
 from aws_cdk import core
 from aws_cdk.aws_ecr import Repository
+from aws_cdk.aws_lambda import DockerImageFunction
+from aws_cdk.aws_stepfunctions import Errors, Parallel, Fail
+from aws_cdk.aws_stepfunctions_tasks import LambdaInvoke
 
 from lib.stack.stepfunctions.resources.function.get_forecast_resource import get_get_forecast_resource
 from lib.stack.stepfunctions.resources.function.list_channels_resource import get_list_channels_resource
@@ -18,33 +21,35 @@ class StepFunctionsStack(core.Stack):
             repository_name=stack_util.get_name('repo'),
             repository_arn=f'arn:aws:ecr:{core.Aws.REGION}:{core.Aws.ACCOUNT_ID}:repository/{stack_util.get_name("repo")}'
         )
-        get_weather_forecast_function = get_get_forecast_resource(self, repo)
+        get__forecast_function = get_get_forecast_resource(self, repo)
         list_channels_function = get_list_channels_resource(self, repo)
+        
+        parallel_task = self.get_parallel_task(self, get__forecast_function, list_channels_function)
 
-        # def get_parallel(self, scope: core.Construct, get_forecast: DockerImageFunction,
-        #                  list_channels: DockerImageFunction, fail: Fail) -> Parallel:
-        #     get_forecast_task = LambdaInvoke(scope,
-        #                                      'GetForecastTask',
-        #                                      lambda_function=get_forecast,
-        #                                      input_path='$',
-        #                                      result_path='$.get_forecast_task',
-        #                                      output_path='$',
-        #                                      payload_response_only=True)
-        #
-        #     list_channels_task = LambdaInvoke(scope,
-        #                                       'ListChannelsTask',
-        #                                       lambda_function=list_channels,
-        #                                       input_path='$',
-        #                                       result_path='$.list_channels_task',
-        #                                       output_path='$',
-        #                                       payload_response_only=True)
-        #
-        #     parallel = Parallel(self, 'ParallelState')
-        #     parallel.branch(get_forecast_task)
-        #     parallel.branch(list_channels_task)
-        #
-        #     parallel.add_catch(fail,
-        #                        errors=[Errors.ALL],
-        #                        result_path='$error_info')
+    def get_parallel_task(self, scope: core.Construct, get_forecast: DockerImageFunction,
+                          list_channels: DockerImageFunction, fail: Fail) -> Parallel:
+        get_forecast_task = LambdaInvoke(scope,
+                                         'GetForecastTask',
+                                         lambda_function=get_forecast,
+                                         input_path='$',
+                                         result_path='$.get_forecast_task',
+                                         output_path='$',
+                                         payload_response_only=True)
 
-        # return parallel
+        list_channels_task = LambdaInvoke(scope,
+                                          'ListChannelsTask',
+                                          lambda_function=list_channels,
+                                          input_path='$',
+                                          result_path='$.list_channels_task',
+                                          output_path='$',
+                                          payload_response_only=True)
+
+        parallel = Parallel(self, 'ParallelState')
+        parallel.branch(get_forecast_task)
+        parallel.branch(list_channels_task)
+
+        parallel.add_catch(fail,
+                           errors=[Errors.ALL],
+                           result_path='$error_info')
+
+        return parallel

@@ -8,4 +8,5 @@ from lib.domain.domain.forecast.forecast import Forecast
 class ForecastGetResponse:
     statusCode: int
     errors: List[str]
-    forecast: Optional[str]
+    telop: Optional[str]
+    summary: Optional[str]

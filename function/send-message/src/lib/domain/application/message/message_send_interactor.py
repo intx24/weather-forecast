@@ -39,7 +39,7 @@ class MessageSendInteractor(AbstractMessageSendUseCase):
 
             for n in channel_name_list:
                 message = Message(
-                    text=request.text,
+                    text=request.summary,
                     channel=n,
                     username='天気予報Bot',
                     link_names=True,
