@@ -1,4 +1,3 @@
-import json
 from http import HTTPStatus
 from unittest import TestCase, mock
 from unittest.mock import Mock
@@ -31,8 +30,6 @@ class TestMessageController(TestCase):
             'headers': {
                 'Content-Type': 'application/json'
             },
-            'body': json.dumps({
-                'errors': [],
-            }, default=MessageController.default_method)
+            'body': {},
         }
         self.assertEqual(expected, actual)

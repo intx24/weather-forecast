@@ -1,4 +1,3 @@
-import json
 import os
 from typing import Dict
 
@@ -37,9 +36,5 @@ class MessageController:
             'headers': {
                 'Content-Type': 'application/json'
             },
-            'body': json.dumps({
-                'errors': response.errors,
-            },
-                default=MessageController.default_method,
-                ensure_ascii=False)
+            'body': {}
         }
