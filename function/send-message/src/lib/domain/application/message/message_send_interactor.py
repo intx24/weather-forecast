@@ -22,14 +22,16 @@ class MessageSendInteractor(AbstractMessageSendUseCase):
     def get_icon_emoji(telop: str):
         if '晴' in telop:
             return ':sunny:'
+        elif '風' in telop:
+            return ':tornado_cloud:'
+        elif '雷' in telop:
+            return ':thunder_cloud_and_rain:'
         elif '雨' in telop:
             return ':rain_cloud:'
         elif '曇' in telop:
-            return ':thunder_cloud_and_rain:'
-        elif '風' in telop:
-            return ':tornado_cloud:'
+            return ':cloud:'
         else:
-            return ':sun:'
+            return ':sunny:'
 
     def handle(self, request: MessageSendRequest) -> MessageSendResponse:
         channel_list: List[Channel] = self.__channel_repository.list(request.token)
