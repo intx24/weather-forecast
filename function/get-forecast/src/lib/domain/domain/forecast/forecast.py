@@ -1,6 +1,11 @@
 from dataclasses import dataclass
 from typing import List
 
+@dataclass(frozen=True)
+class Detail:
+    weather: str
+    wind: str
+    wave: str
 
 @dataclass(frozen=True)
 class CelsiusAndFahrenheit:
@@ -16,9 +21,11 @@ class Temperature:
 
 @dataclass(frozen=True)
 class Description:
-    text: str
     public_time: str
-    public_time_format: str
+    formatted_public_time: str
+    headline_text: str
+    body_text: str
+    text: str
 
 
 @dataclass(frozen=True)
@@ -33,6 +40,7 @@ class ChanceOfRain:
 class DayForecast:
     date: str
     date_label: str
+    detail: Detail
     telop: str
     temperature: Temperature
     chance_of_rain: ChanceOfRain
@@ -42,13 +50,15 @@ class DayForecast:
 class Location:
     city: str
     area: str
+    district: str
     prefecture: str
 
 
 @dataclass(frozen=True)
 class Forecast:
     public_time: str
-    public_time_format: str
+    formatted_public_time: str
+    publishing_office: str
     title: str
     link: str
     description: Description

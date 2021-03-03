@@ -2,7 +2,7 @@ from unittest import TestCase, mock
 
 from lib.domain.domain.forecast.abstract_forecast_repository import AbstractForecastRepository
 from lib.domain.domain.forecast.forecast import Forecast, Description, DayForecast, Temperature, CelsiusAndFahrenheit, \
-    ChanceOfRain, Location
+    ChanceOfRain, Location, Detail
 from lib.infrastructure.forecast.forecast_repository import ForecastRepository
 
 
@@ -14,7 +14,7 @@ class MockResponse:
         return self.json_data
 
 
-class TestForecastRepositoryc(TestCase):
+class TestForecastRepository(TestCase):
     __repository: AbstractForecastRepository
 
     def setUp(self) -> None:
@@ -24,16 +24,25 @@ class TestForecastRepositoryc(TestCase):
     def test_get_by_city(self, mock_get):
         response: MockResponse = MockResponse({
             'publicTime': 'publicTime1',
-            'publicTime_format': 'publicTime_format1',
+            'formattedPublicTime': 'publicTime_format1',
+            'publishingOffice': 'po1',
             'title': 'title1',
             'link': 'https://www.jma.go.jp/jp/yoho/346.html',
             'description': {
                 'text': 'text1',
                 'publicTime': 'publicTime1',
-                'publicTime_format': 'publicTime_format1'
+                'formattedPublicTime': 'publicTime_format1',
+                'headlineText': 'ht1',
+                'bodyText': 'bt1',
             },
             'forecasts': [{
-                'date': 'date1', 'dateLabel': '今日',
+                'date': 'date1',
+                'dateLabel': '今日',
+                'detail': {
+                    'weather': '晴れ',
+                    'wind': '北の風',
+                    'wave': '０．５メートル'
+                },
                 'telop': '晴のち曇',
                 'temperature': {'min': {
                     'celsius': '7',
@@ -45,33 +54,42 @@ class TestForecastRepositoryc(TestCase):
                     }
                 },
                 'chanceOfRain': {
-                    '00-06': '10%',
-                    '06-12': '20%',
-                    '12-18': '30%',
-                    '18-24': '40%'
+                    'T00_06': '10%',
+                    'T06_12': '20%',
+                    'T12_18': '30%',
+                    'T18_24': '40%'
                 },
             }],
             'location': {
                 'city': '久留米',
                 'area': '九州',
-                'prefecture': '福岡県'
+                'prefecture': '福岡県',
+                'district': '筑後地方',
             }
         })
         mock_get.return_value = response
 
         expected = Forecast(
             public_time='publicTime1',
-            public_time_format='publicTime_format1',
+            formatted_public_time='publicTime_format1',
+            publishing_office='po1',
             title='title1',
             link='https://www.jma.go.jp/jp/yoho/346.html',
             description=Description(
                 text='text1',
                 public_time='publicTime1',
-                public_time_format='publicTime_format1',
+                formatted_public_time='publicTime_format1',
+                headline_text='ht1',
+                body_text='bt1',
             ),
             forecasts=[DayForecast(
                 date='date1',
                 date_label='今日',
+                detail=Detail(
+                    weather='晴れ',
+                    wind='北の風',
+                    wave='０．５メートル',
+                ),
                 telop='晴のち曇',
                 temperature=Temperature(
                     min=CelsiusAndFahrenheit(
@@ -94,6 +112,7 @@ class TestForecastRepositoryc(TestCase):
                 city='久留米',
                 area='九州',
                 prefecture='福岡県',
+                district='筑後地方',
             )
         )
 

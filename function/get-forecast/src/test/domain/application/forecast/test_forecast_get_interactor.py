@@ -3,7 +3,8 @@ from unittest import TestCase
 from unittest.mock import Mock
 
 from lib.domain.application.forecast.forecast_get_interactor import ForecastGetInteractor
-from lib.domain.domain.forecast.forecast import Forecast, DayForecast, Temperature, CelsiusAndFahrenheit, ChanceOfRain
+from lib.domain.domain.forecast.forecast import Forecast, DayForecast, Temperature, CelsiusAndFahrenheit, ChanceOfRain, \
+    Description
 from lib.infrastructure.forecast.forecast_repository import ForecastRepository
 from lib.usecase.forecast.get.forecast_get_request import ForecastGetRequest
 from lib.usecase.forecast.get.forecast_get_response import ForecastGetResponse
@@ -16,13 +17,15 @@ class TestForecastGetInteractor(TestCase):
         # noinspection PyTypeChecker
         self.__repository_mock.get_by_city.return_value = Forecast(
             public_time='public_time1',
-            public_time_format=None,
+            formatted_public_time=None,
+            publishing_office=None,
             link=None,
             title='東京都 渋谷区 の天気',
             location=None,
             forecasts=[DayForecast(
                 date='2020-11-11',
                 date_label='今日',
+                detail=None,
                 telop='晴れ',
                 temperature=Temperature(
                     min=CelsiusAndFahrenheit(
@@ -30,8 +33,8 @@ class TestForecastGetInteractor(TestCase):
                         fahrenheit=2
                     ),
                     max=CelsiusAndFahrenheit(
-                        celsius=3,
-                        fahrenheit=4
+                        celsius=30,
+                        fahrenheit=40
                     )
                 ),
                 chance_of_rain=ChanceOfRain(
@@ -41,7 +44,13 @@ class TestForecastGetInteractor(TestCase):
                     t18_24='4%',
                 )
             )],
-            description=None,
+            description=Description(
+                headline_text='詳細です。',
+                body_text='詳細ボディです',
+                text='full_text',
+                public_time=None,
+                formatted_public_time=None,
+            ),
         )
         interactor = ForecastGetInteractor(self.__repository_mock)
 
@@ -55,12 +64,13 @@ class TestForecastGetInteractor(TestCase):
             statusCode=HTTPStatus.OK,
             errors=[],
             telop='晴れ',
-            summary='今日(2020-11-11)の 東京都 渋谷区 の天気\n'
-                    + '晴れ\n'
-                    + '最低気温: 1 度\n'
-                    + '最高気温: 3 度\n'
-                    + '降水確率: 00-06=1%, 06-12=2%, '
-                    + '12-18=3%, 18-24=4%'
+            summary='2020-11-11の 東京都 渋谷区 の天気\n'
+                    + '晴れ :sunny:\n'
+                    + '詳細です。\n'
+                    + '最低気温: 1 度 :cold_face:\n'
+                    + '最高気温: 30 度 :hot_face:\n'
+                    + '降水確率: 00~06=1%, 06~12=2%, '
+                    + '12~18=3%, 18~24=4%'
         )
         self.assertEqual(expected, actual)
 
@@ -69,14 +79,16 @@ class TestForecastGetInteractor(TestCase):
         # noinspection PyTypeChecker
         self.__repository_mock.get_by_city.return_value = Forecast(
             public_time='public_time1',
-            public_time_format=None,
+            publishing_office=None,
+            formatted_public_time=None,
             link=None,
             title='東京都 渋谷区 の天気',
             location=None,
             forecasts=[DayForecast(
                 date='2020-11-11',
                 date_label='今日',
-                telop='晴れ',
+                detail=None,
+                telop='雷',
                 temperature=Temperature(
                     min=None,
                     max=None,
@@ -88,7 +100,13 @@ class TestForecastGetInteractor(TestCase):
                     t18_24='4%',
                 )
             )],
-            description=None,
+            description=Description(
+                headline_text='詳細です。',
+                body_text='詳細ボディです',
+                text='full_text',
+                public_time=None,
+                formatted_public_time=None,
+            ),
         )
         interactor = ForecastGetInteractor(self.__repository_mock)
 
@@ -101,13 +119,14 @@ class TestForecastGetInteractor(TestCase):
         expected: ForecastGetResponse = ForecastGetResponse(
             statusCode=HTTPStatus.OK,
             errors=[],
-            telop='晴れ',
-            summary='今日(2020-11-11)の 東京都 渋谷区 の天気\n'
-                    + '晴れ\n'
+            telop='雷',
+            summary='2020-11-11の 東京都 渋谷区 の天気\n'
+                    + '雷 :thunder_cloud_and_rain:\n'
+                    + '詳細です。\n'
                     + '最低気温: 不明\n'
                     + '最高気温: 不明\n'
-                    + '降水確率: 00-06=1%, 06-12=2%, '
-                    + '12-18=3%, 18-24=4%'
+                    + '降水確率: 00~06=1%, 06~12=2%, '
+                    + '12~18=3%, 18~24=4%'
         )
         self.assertEqual(expected, actual)
 

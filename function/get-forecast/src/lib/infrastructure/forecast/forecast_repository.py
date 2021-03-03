@@ -4,7 +4,7 @@ import requests
 
 from lib.domain.domain.forecast.abstract_forecast_repository import AbstractForecastRepository
 from lib.domain.domain.forecast.forecast import Forecast, Description, Temperature, CelsiusAndFahrenheit, ChanceOfRain, \
-    DayForecast, Location
+    DayForecast, Location, Detail
 
 
 class ForecastRepository(AbstractForecastRepository):
@@ -20,13 +20,22 @@ class ForecastRepository(AbstractForecastRepository):
         response_dict = response.json()
 
         description: Description = Description(
-            text=response_dict['description']['text'],
             public_time=response_dict['description']['publicTime'],
-            public_time_format=response_dict['description']['publicTime_format'],
+            formatted_public_time=response_dict['description']['formattedPublicTime'],
+            headline_text=response_dict['description']['headlineText'],
+            body_text=response_dict['description']['bodyText'],
+            text=response_dict['description']['text'],
         )
 
         day_forecast_list: List[DayForecast] = []
         for f in response_dict['forecasts']:
+            detail_dict = f['detail']
+            detail: Detail = Detail(
+                weather=detail_dict['weather'],
+                wind=detail_dict['wind'],
+                wave=detail_dict['wave'],
+            )
+
             temperature_dict = f['temperature']
             min_dict = temperature_dict['min']
             max_dict = temperature_dict['max']
@@ -42,15 +51,16 @@ class ForecastRepository(AbstractForecastRepository):
             )
             cor_dict = f['chanceOfRain']
             cor = ChanceOfRain(
-                t00_06=cor_dict['00-06'],
-                t06_12=cor_dict['06-12'],
-                t12_18=cor_dict['12-18'],
-                t18_24=cor_dict['18-24'],
+                t00_06=cor_dict['T00_06'],
+                t06_12=cor_dict['T06_12'],
+                t12_18=cor_dict['T12_18'],
+                t18_24=cor_dict['T18_24'],
             )
 
             day_forecast = DayForecast(
                 date=f['date'],
                 date_label=f['dateLabel'],
+                detail=detail,
                 telop=f['telop'],
                 temperature=temperature,
                 chance_of_rain=cor,
@@ -61,12 +71,14 @@ class ForecastRepository(AbstractForecastRepository):
         location: Location = Location(
             area=response_dict['location']['area'],
             prefecture=response_dict['location']['prefecture'],
-            city=response_dict['location']['city']
+            district=response_dict['location']['district'],
+            city=response_dict['location']['city'],
         )
 
         forecast: Forecast = Forecast(
             public_time=response_dict['publicTime'],
-            public_time_format=response_dict['publicTime_format'],
+            formatted_public_time=response_dict['formattedPublicTime'],
+            publishing_office=response_dict['publishingOffice'],
             title=response_dict['title'],
             link=response_dict['link'],
             description=description,
