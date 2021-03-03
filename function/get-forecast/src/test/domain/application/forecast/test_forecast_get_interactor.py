@@ -4,7 +4,7 @@ from unittest.mock import Mock
 
 from lib.domain.application.forecast.forecast_get_interactor import ForecastGetInteractor
 from lib.domain.domain.forecast.forecast import Forecast, DayForecast, Temperature, CelsiusAndFahrenheit, ChanceOfRain, \
-    Description
+    Description, Location
 from lib.infrastructure.forecast.forecast_repository import ForecastRepository
 from lib.usecase.forecast.get.forecast_get_request import ForecastGetRequest
 from lib.usecase.forecast.get.forecast_get_response import ForecastGetResponse
@@ -21,7 +21,12 @@ class TestForecastGetInteractor(TestCase):
             publishing_office=None,
             link=None,
             title='東京都 渋谷区 の天気',
-            location=None,
+            location=Location(
+                area='area',
+                prefecture='東京都',
+                city='渋谷区',
+                district='district'
+            ),
             forecasts=[DayForecast(
                 date='2020-11-11',
                 date_label='今日',
@@ -64,13 +69,13 @@ class TestForecastGetInteractor(TestCase):
             statusCode=HTTPStatus.OK,
             errors=[],
             telop='晴れ',
-            summary='2020-11-11の 東京都 渋谷区 の天気\n'
-                    + '晴れ :sunny:\n'
-                    + '詳細です。\n'
-                    + '最低気温: 1 度 :cold_face:\n'
-                    + '最高気温: 30 度 :hot_face:\n'
-                    + '降水確率: 00~06=1%, 06~12=2%, '
-                    + '12~18=3%, 18~24=4%'
+            summary='2020-11-11 東京都 渋谷区 '
+                    + ':sunny: 晴れ :sunny:\n\n'
+                    + ':japanese_goblin: > 詳細です。\n\n'
+                    + '最低気温: 1 ℃ :cold_face:, '
+                    + '最高気温: 30 ℃ :hot_face:\n\n'
+                    + '降水確率: 00~06 = 1%, 06~12 = 2%, '
+                    + '12~18 = 3%, 18~24 = 4%'
         )
         self.assertEqual(expected, actual)
 
@@ -83,7 +88,12 @@ class TestForecastGetInteractor(TestCase):
             formatted_public_time=None,
             link=None,
             title='東京都 渋谷区 の天気',
-            location=None,
+            location=Location(
+                area='area',
+                prefecture='東京都',
+                city='渋谷区',
+                district='district'
+            ),
             forecasts=[DayForecast(
                 date='2020-11-11',
                 date_label='今日',
@@ -120,13 +130,13 @@ class TestForecastGetInteractor(TestCase):
             statusCode=HTTPStatus.OK,
             errors=[],
             telop='雷',
-            summary='2020-11-11の 東京都 渋谷区 の天気\n'
-                    + '雷 :thunder_cloud_and_rain:\n'
-                    + '詳細です。\n'
-                    + '最低気温: 不明\n'
-                    + '最高気温: 不明\n'
-                    + '降水確率: 00~06=1%, 06~12=2%, '
-                    + '12~18=3%, 18~24=4%'
+            summary='2020-11-11 東京都 渋谷区 '
+                    + ':thunder_cloud_and_rain: 雷 :thunder_cloud_and_rain:\n\n'
+                    + ':japanese_goblin: > 詳細です。\n\n'
+                    + '最低気温: 不明, '
+                    + '最高気温: 不明\n\n'
+                    + '降水確率: 00~06 = 1%, 06~12 = 2%, '
+                    + '12~18 = 3%, 18~24 = 4%'
         )
         self.assertEqual(expected, actual)
 

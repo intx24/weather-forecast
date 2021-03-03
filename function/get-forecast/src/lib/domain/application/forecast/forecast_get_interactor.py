@@ -44,24 +44,24 @@ class ForecastGetInteractor(AbstractForecastGetUseCase):
         if day_forecast.temperature.min:
             min_celsius = day_forecast.temperature.min.celsius
             min_celsius_icon = ForecastGetInteractor.get_face_icon_by_temperature(min_celsius)
-            min_temp = f'{min_celsius} 度 {min_celsius_icon}' if min_celsius is not None else '不明'
+            min_temp = f'{min_celsius} ℃ {min_celsius_icon}' if min_celsius is not None else '不明'
 
         max_temp = '不明'
         if day_forecast.temperature.max:
             max_celsius = day_forecast.temperature.max.celsius
             max_celsius_icon = ForecastGetInteractor.get_face_icon_by_temperature(max_celsius)
-            max_temp = f'{max_celsius} 度 {max_celsius_icon}' if max_celsius is not None else '不明'
+            max_temp = f'{max_celsius} ℃ {max_celsius_icon}' if max_celsius is not None else '不明'
 
         telop_icon = ForecastGetInteractor.get_icon_emoji(telop=day_forecast.telop)
-        return f'{day_forecast.date}の {forecast.title}\n' \
-            + f'{day_forecast.telop} {telop_icon}\n' \
-            + f'{forecast.description.headline_text}\n' \
-            + f'最低気温: {min_temp}\n' \
-            + f'最高気温: {max_temp}\n' \
-            + f'降水確率: 00~06={day_forecast.chance_of_rain.t00_06}, ' \
-            + f'06~12={day_forecast.chance_of_rain.t06_12}, ' \
-            + f'12~18={day_forecast.chance_of_rain.t12_18}, ' \
-            + f'18~24={day_forecast.chance_of_rain.t18_24}'
+        return f'{day_forecast.date} {forecast.location.prefecture} {forecast.location.city} ' \
+            + f'{telop_icon} {day_forecast.telop} {telop_icon}\n\n' \
+            + f':japanese_goblin: > {forecast.description.headline_text}\n\n' \
+            + f'最低気温: {min_temp}, ' \
+            + f'最高気温: {max_temp}\n\n' \
+            + f'降水確率: 00~06 = {day_forecast.chance_of_rain.t00_06}, ' \
+            + f'06~12 = {day_forecast.chance_of_rain.t06_12}, ' \
+            + f'12~18 = {day_forecast.chance_of_rain.t12_18}, ' \
+            + f'18~24 = {day_forecast.chance_of_rain.t18_24}'
 
     def handle(self, request: ForecastGetRequest) -> ForecastGetResponse:
         try:
