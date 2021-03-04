@@ -32,6 +32,7 @@ class ForecastController:
                 'Content-Type': 'application/json'
             },
             'body': {
+                'errors': response.errors,
                 'telop': response.telop,
                 'summary': response.summary,
             }

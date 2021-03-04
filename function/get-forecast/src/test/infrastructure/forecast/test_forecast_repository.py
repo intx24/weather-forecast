@@ -24,14 +24,14 @@ class TestForecastRepository(TestCase):
     def test_get_by_city(self, mock_get):
         response: MockResponse = MockResponse({
             'publicTime': 'publicTime1',
-            'formattedPublicTime': 'publicTime_format1',
+            'publicTimeFormatted': 'publicTime_format1',
             'publishingOffice': 'po1',
             'title': 'title1',
             'link': 'https://www.jma.go.jp/jp/yoho/346.html',
             'description': {
                 'text': 'text1',
                 'publicTime': 'publicTime1',
-                'formattedPublicTime': 'publicTime_format1',
+                'publicTimeFormatted': 'publicTime_format1',
                 'headlineText': 'ht1',
                 'bodyText': 'bt1',
             },
@@ -71,14 +71,14 @@ class TestForecastRepository(TestCase):
 
         expected = Forecast(
             public_time='publicTime1',
-            formatted_public_time='publicTime_format1',
+            public_time_formatted='publicTime_format1',
             publishing_office='po1',
             title='title1',
             link='https://www.jma.go.jp/jp/yoho/346.html',
             description=Description(
                 text='text1',
                 public_time='publicTime1',
-                formatted_public_time='publicTime_format1',
+                public_time_formatted='publicTime_format1',
                 headline_text='ht1',
                 body_text='bt1',
             ),

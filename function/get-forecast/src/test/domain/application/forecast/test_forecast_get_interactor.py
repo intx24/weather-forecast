@@ -17,7 +17,7 @@ class TestForecastGetInteractor(TestCase):
         # noinspection PyTypeChecker
         self.__repository_mock.get_by_city.return_value = Forecast(
             public_time='public_time1',
-            formatted_public_time=None,
+            public_time_formatted=None,
             publishing_office=None,
             link=None,
             title='東京都 渋谷区 の天気',
@@ -54,7 +54,7 @@ class TestForecastGetInteractor(TestCase):
                 body_text='詳細ボディです',
                 text='full_text',
                 public_time=None,
-                formatted_public_time=None,
+                public_time_formatted=None,
             ),
         )
         interactor = ForecastGetInteractor(self.__repository_mock)
@@ -85,7 +85,7 @@ class TestForecastGetInteractor(TestCase):
         self.__repository_mock.get_by_city.return_value = Forecast(
             public_time='public_time1',
             publishing_office=None,
-            formatted_public_time=None,
+            public_time_formatted=None,
             link=None,
             title='東京都 渋谷区 の天気',
             location=Location(
@@ -115,7 +115,7 @@ class TestForecastGetInteractor(TestCase):
                 body_text='詳細ボディです',
                 text='full_text',
                 public_time=None,
-                formatted_public_time=None,
+                public_time_formatted=None,
             ),
         )
         interactor = ForecastGetInteractor(self.__repository_mock)

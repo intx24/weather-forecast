@@ -22,7 +22,7 @@ class Temperature:
 @dataclass(frozen=True)
 class Description:
     public_time: str
-    formatted_public_time: str
+    public_time_formatted: str
     headline_text: str
     body_text: str
     text: str
@@ -57,7 +57,7 @@ class Location:
 @dataclass(frozen=True)
 class Forecast:
     public_time: str
-    formatted_public_time: str
+    public_time_formatted: str
     publishing_office: str
     title: str
     link: str

@@ -28,6 +28,7 @@ class TestForecastController(TestCase):
                 'Content-Type': 'application/json'
             },
             'body': {
+                'errors': [],
                 'telop': None,
                 'summary': None,
             }

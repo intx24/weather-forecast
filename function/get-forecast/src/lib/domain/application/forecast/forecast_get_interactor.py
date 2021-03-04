@@ -31,6 +31,9 @@ class ForecastGetInteractor(AbstractForecastGetUseCase):
 
     @staticmethod
     def get_face_icon_by_temperature(temperature: float):
+        if temperature is None:
+            return ''
+
         if temperature <= 10:
             return ':cold_face:'
         elif temperature >= 30:

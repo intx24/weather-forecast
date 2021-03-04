@@ -21,7 +21,7 @@ class ForecastRepository(AbstractForecastRepository):
 
         description: Description = Description(
             public_time=response_dict['description']['publicTime'],
-            formatted_public_time=response_dict['description']['formattedPublicTime'],
+            public_time_formatted=response_dict['description']['publicTimeFormatted'],
             headline_text=response_dict['description']['headlineText'],
             body_text=response_dict['description']['bodyText'],
             text=response_dict['description']['text'],
@@ -37,16 +37,22 @@ class ForecastRepository(AbstractForecastRepository):
             )
 
             temperature_dict = f['temperature']
+
             min_dict = temperature_dict['min']
+            min_celsius = float(min_dict['celsius']) if min_dict['celsius'] else None
+            min_fahrenheit = float(min_dict['fahrenheit']) if min_dict['fahrenheit'] else None
+
             max_dict = temperature_dict['max']
+            max_celsius = float(max_dict['celsius']) if max_dict['celsius'] else None
+            max_fahrenheit = float(max_dict['fahrenheit']) if max_dict['fahrenheit'] else None
             temperature = Temperature(
                 min=CelsiusAndFahrenheit(
-                    celsius=float(min_dict['celsius']),
-                    fahrenheit=float(min_dict['fahrenheit'])
+                    celsius=min_celsius,
+                    fahrenheit=min_fahrenheit
                 ) if min_dict else None,
                 max=CelsiusAndFahrenheit(
-                    celsius=float(max_dict['celsius']) if bool(max_dict['celsius']) else None,
-                    fahrenheit=float(max_dict['fahrenheit']) if bool(max_dict['fahrenheit']) else None,
+                    celsius=max_celsius,
+                    fahrenheit=max_fahrenheit,
                 ) if max_dict else None,
             )
             cor_dict = f['chanceOfRain']
@@ -77,7 +83,7 @@ class ForecastRepository(AbstractForecastRepository):
 
         forecast: Forecast = Forecast(
             public_time=response_dict['publicTime'],
-            formatted_public_time=response_dict['formattedPublicTime'],
+            public_time_formatted=response_dict['publicTimeFormatted'],
             publishing_office=response_dict['publishingOffice'],
             title=response_dict['title'],
             link=response_dict['link'],
