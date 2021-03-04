@@ -62,7 +62,7 @@ class StepFunctionsStack(core.Stack):
                     description='invoking state machine',
                     rule_name=stack_util.get_upper_name('INVOKE-STATE-MACHINE'),
                     schedule=Schedule.cron(
-                        hour='1',
+                        hour='23',
                         minute='0',
                     ))
 
