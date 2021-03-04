@@ -60,7 +60,8 @@ class TestForecastGetInteractor(TestCase):
         interactor = ForecastGetInteractor(self.__repository_mock)
 
         request: ForecastGetRequest = ForecastGetRequest(
-            city=1
+            city=1,
+            date_label='今日',
         )
         actual = interactor.handle(request)
 
@@ -69,7 +70,8 @@ class TestForecastGetInteractor(TestCase):
             statusCode=HTTPStatus.OK,
             errors=[],
             telop='晴れ',
-            summary='2020-11-11 東京都 渋谷区 '
+            summary='今日 (2020-11-11) の天気\n\n'
+                    + '東京都 渋谷区 '
                     + ':sunny: 晴れ :sunny:\n\n'
                     + ':japanese_goblin: > 詳細です。\n\n'
                     + '最低気温: 1 ℃ :cold_face:, '
@@ -78,7 +80,6 @@ class TestForecastGetInteractor(TestCase):
                     + '12~18 = 3%, 18~24 = 4%'
         )
         self.assertEqual(expected, actual)
-
 
     def test_handle__ok2(self):
         # noinspection PyTypeChecker
@@ -96,7 +97,7 @@ class TestForecastGetInteractor(TestCase):
             ),
             forecasts=[DayForecast(
                 date='2020-11-11',
-                date_label='今日',
+                date_label='明日',
                 detail=None,
                 telop='雷',
                 temperature=Temperature(
@@ -121,7 +122,8 @@ class TestForecastGetInteractor(TestCase):
         interactor = ForecastGetInteractor(self.__repository_mock)
 
         request: ForecastGetRequest = ForecastGetRequest(
-            city=1
+            city=1,
+            date_label='明日'
         )
         actual = interactor.handle(request)
 
@@ -130,7 +132,8 @@ class TestForecastGetInteractor(TestCase):
             statusCode=HTTPStatus.OK,
             errors=[],
             telop='雷',
-            summary='2020-11-11 東京都 渋谷区 '
+            summary='明日 (2020-11-11) の天気\n\n'
+                    + '東京都 渋谷区 '
                     + ':thunder_cloud_and_rain: 雷 :thunder_cloud_and_rain:\n\n'
                     + ':japanese_goblin: > 詳細です。\n\n'
                     + '最低気温: 不明, '
@@ -146,7 +149,8 @@ class TestForecastGetInteractor(TestCase):
         interactor = ForecastGetInteractor(self.__repository_mock)
 
         request: ForecastGetRequest = ForecastGetRequest(
-            city=1
+            city=1,
+            date_label='今日',
         )
 
         actual: ForecastGetResponse = interactor.handle(request)

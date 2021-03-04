@@ -22,8 +22,11 @@ class ForecastController:
 
     def get(self, event: Dict) -> Dict:
         city = int(event['city'])
+        date_label = str(event['date_label'])
 
-        request: ForecastGetRequest = ForecastGetRequest(city=city)
+        request: ForecastGetRequest = ForecastGetRequest(
+            city=city,
+            date_label=date_label)
         response = self.__get_interactor.handle(request)
 
         return {

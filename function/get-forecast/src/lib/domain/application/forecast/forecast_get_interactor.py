@@ -56,7 +56,8 @@ class ForecastGetInteractor(AbstractForecastGetUseCase):
             max_temp = f'{max_celsius} ℃ {max_celsius_icon}' if max_celsius is not None else '不明'
 
         telop_icon = ForecastGetInteractor.get_icon_emoji(telop=day_forecast.telop)
-        return f'{day_forecast.date} {forecast.location.prefecture} {forecast.location.city} ' \
+        return f'{day_forecast.date_label} ({day_forecast.date}) の天気\n\n' \
+            + f'{forecast.location.prefecture} {forecast.location.city} ' \
             + f'{telop_icon} {day_forecast.telop} {telop_icon}\n\n' \
             + f':japanese_goblin: > {forecast.description.headline_text}\n\n' \
             + f'最低気温: {min_temp}, ' \
@@ -69,16 +70,16 @@ class ForecastGetInteractor(AbstractForecastGetUseCase):
     def handle(self, request: ForecastGetRequest) -> ForecastGetResponse:
         try:
             forecast: Forecast = self.__repository.get_by_city(request.city)
-            today_forecast = next(filter(lambda f: f.date_label == '今日', forecast.forecasts), None)
+            target_forecast = next(filter(lambda f: f.date_label == request.date_label, forecast.forecasts), None)
 
-            if today_forecast is None:
-                raise Exception('today forecast is not inclucded.')
+            if target_forecast is None:
+                raise Exception('target forecast is not inclucded.')
 
             response: ForecastGetResponse = ForecastGetResponse(
                 statusCode=HTTPStatus.OK,
                 errors=[],
-                telop=today_forecast.telop,
-                summary=ForecastGetInteractor.to_summary(forecast, today_forecast)
+                telop=target_forecast.telop,
+                summary=ForecastGetInteractor.to_summary(forecast, target_forecast)
             )
             return response
         except Exception as e:

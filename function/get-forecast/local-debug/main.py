@@ -11,7 +11,8 @@ URL: str = f'http://localhost:{PORT}/2015-03-31/functions/function/invocations'
 
 def call(url):
     body = json.dumps({
-        'city': 410020
+        'city': 410020,
+        'date_label': '今日'
     }).encode('utf-8')
     res = requests.post(
         url,

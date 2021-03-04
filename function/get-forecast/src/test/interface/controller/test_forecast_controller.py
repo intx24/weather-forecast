@@ -20,7 +20,7 @@ class TestForecastController(TestCase):
         )
 
         controller = ForecastController(get_interactor=self.__get_interactor_mock)
-        actual = controller.get({'city': 1})
+        actual = controller.get({'city': 1, 'date_label': '今日'})
 
         expected = {
             'statusCode': HTTPStatus.OK,

@@ -58,14 +58,32 @@ class StepFunctionsStack(core.Stack):
                                      .next(send_message_task)
                                      .next(succeed_task))
 
-        rule = Rule(self, 'StateMachineRule',
-                    description='invoking state machine',
-                    rule_name=stack_util.get_upper_name('INVOKE-STATE-MACHINE'),
-                    schedule=Schedule.cron(
-                        hour='23',
-                        minute='0',
-                    ))
+        today_rule = Rule(self, 'StateMachineTodayRule',
+                          description='invoking state machine for today',
+                          rule_name=stack_util.get_upper_name('INVOKE-STATE-MACHINE-TODAY'),
+                          schedule=Schedule.cron(
+                              hour='23',
+                              minute='0',
+                          ))
 
-        target = SfnStateMachine(state_machine,
-                                 input=RuleTargetInput.from_object({'city': '130010'}))
-        rule.add_target(target)
+        tomorrow_rule = Rule(self, 'StateMachineTomorrowRule',
+                             description='invoking state machine for tomorrow',
+                             rule_name=stack_util.get_upper_name('INVOKE-STATE-MACHINE-TOMORROW'),
+                             schedule=Schedule.cron(
+                                 hour='9',
+                                 minute='30',
+                             ))
+
+        today_target = SfnStateMachine(state_machine,
+                                       input=RuleTargetInput.from_object({
+                                           'city': '130010',
+                                           'date_label': '今日'
+                                       }))
+        today_rule.add_target(today_target)
+
+        tomorrow_target = SfnStateMachine(state_machine,
+                                          input=RuleTargetInput.from_object({
+                                              'city': '130010',
+                                              'date_label': '明日'
+                                          }))
+        tomorrow_rule.add_target(tomorrow_target)
